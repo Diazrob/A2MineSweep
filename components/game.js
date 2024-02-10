@@ -1,8 +1,15 @@
+/**
+ * \file    game.js
+ * \author  Robee Diaz
+ * \date    2024-02-02
+ * \brief   game page that displays the grid scores and bail button
+ */
+
 import { StatusBar } from 'expo-status-bar';
 import { Button, Alert, Text, View, Pressable, TextInput } from 'react-native';
-import { MyButton} from './components/button';
+import { MyButton} from './button';
 import { useEffect, useState } from 'react';
-import styles from './css/styleSheet';
+import styles from '../css/styleSheet';
 import Modal from 'react-native-modal'
 
 export default function App() {
