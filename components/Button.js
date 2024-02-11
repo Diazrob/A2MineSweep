@@ -2,7 +2,7 @@
  * \file    Button.js
  * \author  Robee Diaz
  * \date    2024-02-02
- * \brief   button that contains a mine or not and passess the value to game.js
+ * \brief   button that contains a mine or not and pass the value to game.js
  */
 
 import { StyleSheet, Button, View, Alert, Pressable,Text } from "react-native"

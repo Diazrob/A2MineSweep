@@ -14,6 +14,50 @@ export default StyleSheet.create ({
     alignItems: 'center',
     justifyContent:'space-evenly',
   },
+  logoContainer: {
+      marginTop: 20,
+  },
+  homepage: {
+      justifyContent:'center',
+      alignItems: 'center',
+      padding: 20,
+      height: 400,
+  },
+  homepageButton: {
+    borderWidth: 2,
+    borderColor: 'black',
+    borderStyle: 'solid',
+    borderRadius: 10,
+    width:250,
+    backgroundColor: '#0369a1',
+    padding: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginVertical: 20,
+  },
+  gifContainer: {
+    backgroundColor: '#f8fafc'
+  },
+  instructionModal: {
+    height: 'full',
+    backgroundColor:'white',
+    padding: 20,
+    borderRadius: 20,
+  },
+  instructionTitle: {
+    fontSize: 30,
+    paddingBottom: 10,
+  },
+  instructionIconText: {
+    flexDirection:'row',
+    alignItems:'center',
+    paddingVertical: 15,
+    paddingRight: 20
+  },
+  instructionText: {
+    fontSize: 20,
+    marginLeft: 20,
+  }, 
   titleFont: {
     fontSize: 40,
   },
@@ -23,6 +67,11 @@ export default StyleSheet.create ({
     justifyContent:'center',
     alignItems: 'center',
     padding: 30,
+  },
+  homepageText: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 30,
   },
  gameButton: {
     borderWidth: 2,
@@ -38,6 +87,7 @@ export default StyleSheet.create ({
   buttonText: {
     color:'white',
     fontSize:20,
+    fontWeight: 'bold',
   },
   newGameModal: {
     backgroundColor: 'white',

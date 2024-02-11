@@ -8,7 +8,7 @@
 import { StatusBar } from 'expo-status-bar';
 import { Button, Alert, Text, View, Pressable, TextInput } from 'react-native';
 import { MyButton} from './button';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import styles from '../css/styleSheet';
 import Modal from 'react-native-modal'
 
