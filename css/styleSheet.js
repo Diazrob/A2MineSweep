@@ -104,6 +104,11 @@ export default StyleSheet.create ({
   modalTextStyle: {
     fontSize: 25,
   },
+  leaderboardText: {
+    fontSize: 25,
+    paddingVertical:20,
+    paddingHorizontal: 10,
+  },
 
 btn: {
   borderWidth: 1,

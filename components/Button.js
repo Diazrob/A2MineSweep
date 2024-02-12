@@ -10,7 +10,7 @@ import { FontAwesome6 } from '@expo/vector-icons';
 import { useState, useEffect } from "react";
 import styles from '../css/styleSheet';
 
-export const MyButton = ({id, isBomb, restart, onScoreUpdate}) => {
+export const MyButton = ({id, isBomb, restart, onScoreUpdate, onBombClick, bMultiplier, onButtonPress}) => {
 
 
   const [isVisible, setIsVisible] = useState(false);
@@ -24,20 +24,23 @@ export const MyButton = ({id, isBomb, restart, onScoreUpdate}) => {
   
   useEffect(() => {
     if(!isBomb) {
-      setButtonScore(Math.round(Math.ceil(Math.random() * (500 - Number.EPSILON) / 100) * 100));
+      setButtonScore((Math.round(Math.ceil(Math.random() * (500 - Number.EPSILON) / 100) * 100))*bMultiplier);
     }
-  },[isBomb, restart]);
+  },[isBomb, restart, bMultiplier]);
 
   const show = () => {
     setIsVisible(true);
     if (!isBomb) {
       setScore((prevScore) => prevScore + buttonScore);
       onScoreUpdate(buttonScore);
+      console.log(onButtonPress())
+      
     } else {
-      Alert.alert("Game Over!, You clicked on a bomb!"); 
       setScore(0); //TODO  add Game over option when bomb is clicked
       onScoreUpdate(0);
+      onBombClick();
     }
+    onButtonPress();
   }; 
   
   return (

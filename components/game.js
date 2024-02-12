@@ -5,26 +5,36 @@
  * \brief   game page that displays the grid scores and bail button
  */
 
-import { StatusBar } from 'expo-status-bar';
 import { Button, Alert, Text, View, Pressable, TextInput } from 'react-native';
 import { MyButton} from './button';
-import { useState } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import styles from '../css/styleSheet';
 import Modal from 'react-native-modal'
 
-export default function App() {
+export default function Game({navigation, route}) {
 
-  const [gridSize, setGridSize] = useState('12')
-  const [bombs, setBombs] = useState('5');
+  const [gridSize, setGridSize] = useState('0')
+  const [bombs, setBombs] = useState('0');
   const [buttons, setButtons] = useState([]);
   const [newGame, setNewGame] = useState(false);
+  const [playAgain, setPlayAgain] = useState(false);
   const [restartKey, setRestartKey] = useState(0);
   const [totalScore, setTotalScore] = useState(0);
+  const [timeLeft, setTimeLeft] = useState(10);
+  const [timerRunning, setTimerRunning] = useState(false);
+  const [timerResetKey, setTimerResetKey] = useState(0);
+  const playerName = route.params.playerName;
 
   //start a new game
-  const startGame = () => {
+  const startGame = useCallback( () => {
     setNewGame(true);
-  }
+  }, []);
+
+  useEffect(() => {
+    startGame();
+
+  },[])
+
 
   //shuffle contents
   const shuffle = () => {
@@ -43,28 +53,63 @@ export default function App() {
     setButtons(buttonsGrid);
   };
 
+  const bombMultiplier = 1 + (bombs * 0.10);
+
+  useEffect(() => {
+    if (timerRunning && timeLeft > 0) {
+      const timer = setInterval(() => {
+        setTimeLeft((prevTime) => prevTime - 1);
+      }, 1000);
+
+      return () => {
+        clearInterval(timer);
+      };
+    } else if (timerRunning && timeLeft === 0) {
+      handleTimesUp();
+      setTimerRunning(false);
+    }
+  }, [timerRunning, timeLeft, timerResetKey]);
+
+  const handleTimesUp= () => {
+    console.log("times up");
+  }
+
+  const handleButtonPress = () => {
+    setTimerResetKey(timerResetKey + 1);
+  }
+
   const handleModalSubmit = () => {
       setGridSize(parseInt(gridSize)*6);
       setBombs(parseInt(bombs));
       setNewGame(false);
       setRestartKey(restartKey + 1);
       setTotalScore(0);
+      setTimerRunning(true);
       shuffle();
   }
 
 const handleScoreUpdate = (buttonScore) => {
 
    buttonScore !=0 ? setTotalScore((prevTotalScore => prevTotalScore + buttonScore)) : setTotalScore(0);
+   
 }
 
-const handleBail = () => {
-  Alert.alert('Bailed out') //TODO add Bailed out option when clicked
-}
+const handleBombClick = () => {
+  setPlayAgain(true);
+};
 
+const handleOkClick = () => {
+    navigation.navigate('Leaderboard', {
+      playerName: playerName,
+      totalScore: totalScore
+    });
+  setPlayAgain(false);
+};
   return (
     <View style={styles.container}>
       <View>
         <Text style={styles.titleFont}>Score: {totalScore}</Text>
+        <Text style={styles.titleFont}>Time Left: {timeLeft}s</Text>
       </View>
       <View style={styles.gridRow}>
           {(() => {
@@ -76,6 +121,9 @@ const handleBail = () => {
                 isBomb={buttons[i]} 
                 restart={restartKey}
                 onScoreUpdate={handleScoreUpdate}
+                onBombClick={handleBombClick}
+                bMultiplier={bombMultiplier}
+                onButtonPress={handleButtonPress}
                 />)
             }
             return buttonList;
@@ -83,7 +131,7 @@ const handleBail = () => {
       </View>
       <Pressable 
       style={styles.gameButton}
-      onPress={handleBail}>
+      onPress={handleOkClick}>
           <Text style={styles.buttonText}>Bail</Text>
       </Pressable>
       <View style={styles.gameButton}>
@@ -92,6 +140,16 @@ const handleBail = () => {
           title='New Game'
         />
        </View>
+       <Modal isVisible={playAgain}>
+            <View style={styles.newGameModal}>
+              <Text style={styles.instructionTitle}>Game Over!, You clicked a bomb!</Text>
+            <Pressable 
+            style={styles.gameButton}
+            onPress={handleOkClick}>
+              <Text style={styles.buttonText}>Ok</Text>
+            </Pressable>
+            </View>
+       </Modal>
       <Modal isVisible={newGame}>
         <View style={styles.newGameModal}>
           <Text style={{fontSize: 30}}>Game Settings</Text>
@@ -116,14 +174,14 @@ const handleBail = () => {
             />
           </View>
           <View style={styles.newGameButton}>
-          <Button
-            onPress={handleModalSubmit}
-            title="Submit"
-            />
+          <Pressable 
+          style={styles.gameButton}
+          onPress={handleModalSubmit}>
+              <Text style={styles.buttonText}>Set</Text>
+            </Pressable>
           </View>
         </View>
       </Modal>
-       <StatusBar style="auto" />
     </View>
   );
 }
