@@ -76,6 +76,7 @@ export default function Game({navigation, route}) {
 
   const handleButtonPress = () => {
     setTimerResetKey(timerResetKey + 1);
+    checkWinCondition();
   }
 
   const handleModalSubmit = () => {
@@ -91,8 +92,25 @@ export default function Game({navigation, route}) {
 const handleScoreUpdate = (buttonScore) => {
 
    buttonScore !=0 ? setTotalScore((prevTotalScore => prevTotalScore + buttonScore)) : setTotalScore(0);
+   checkWinCondition();
    
 }
+
+const checkWinCondition = () => {
+
+  const buttonsArray = Object.values(buttons);
+
+  const openedButtonsCount = buttonsArray.filter((isOpen) => isOpen).length;
+
+  const expectedOpenButtons = parseInt(gridSize) - parseInt(bombs);
+
+  if (openedButtonsCount === expectedOpenButtons) {
+   
+    Alert.alert('Congratulations!, You won!')
+    handleOkClick();
+   
+  }
+};
 
 const handleBombClick = () => {
   setPlayAgain(true);
